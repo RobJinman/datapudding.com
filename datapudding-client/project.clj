@@ -1,4 +1,4 @@
-(defproject datapudding "0.0.0-SNAPSHOT"
+(defproject datapudding-client "0.0.0-SNAPSHOT"
   :description "Datapudding"
 
   :dependencies [[org.clojure/clojure "1.8.0"]

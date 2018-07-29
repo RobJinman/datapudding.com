@@ -13,7 +13,11 @@
                           dispatch
                           dispatch-sync
                           subscribe]]
-   [datapudding.config :refer [app-config]]))
+   [datapudding.config :refer [app-config]]
+   [datapudding.navigation :as nav]))
+
+
+(enable-console-print!)
 
 
 ;; -- Definitions ---------------------------------------------------------
@@ -52,7 +56,7 @@
 (reg-event-fx
  :initialise
  (fn [cofx _]
-   {:db {:msg "Hello, World!"}}))
+   {:db {:navigation {:route [:blog]}}}))
 
 
 ;; -- Subscription Handlers -----------------------------------------------
@@ -70,14 +74,81 @@
   (let [msg (subscribe [:msg])]
     [:div (str @msg)]))
 
+(defn nav-item-view
+  [l10n id]
+  [:div {:class "nav-item"
+         :on-click #(dispatch [:navigation/set-route [id]])}
+   (id l10n)])
+
+(defn navigation-view
+  [l10n]
+  [:div {:class "navbar"}
+   [nav-item-view l10n :about]
+   [nav-item-view l10n :portfolio]
+   [nav-item-view l10n :blog]
+   [nav-item-view l10n :contact]])
+
 (defn header-view
   [l10n]
   [:div {:class "header"}
-   [:img {:src "img/datapudding.svg"}]])
+   [:img {:src "img/datapudding.svg"}]
+   [navigation-view (:navigation l10n)]])
+
+(defn about-view
+  []
+  [:div {:class "about"}
+   "About page"])
+
+(defn portfolio-view
+  []
+  [:div {:class "portfolio"}
+   "Portfolio page"])
+
+(def blog-content
+  [{:date "20/01/2018"
+    :title "Welcome to Datapudding.com"
+    :summary "This is my"
+    :content "This is my new website."}
+   {:date "21/01/2018"
+    :title "An interesting article"
+    :summary "This is very interesting"
+    :content "This is very interesting, isn't it?"}])
+
+(def state-graph
+  {:about {}
+   :portfolio {}
+   :blog {}
+   :contact {}})
+
+(defn blog-view
+  []
+  (let [route (subscribe [:navigation/current])]
+    (fn []
+      [:div {:class "blog"}
+       "Blog"
+       (for [{:keys [date title summary]} blog-content]
+         [:div {:class "article-summary"}
+          [:div {:class "date"} date]
+          [:div {:class "title"
+                 :on-click #(dispatch [:navigation/])} title]
+          [:div {:class "summary"} summary]])])))
+
+(defn contact-view
+  []
+  [:div {:class "contact"}
+   "Contact page"])
 
 (defn content-view
   [l10n]
-  [:div {:class "content-view"}])
+  (let [route (subscribe [:navigation/current])]
+    (fn [l10n]
+      [:div {:class "page-content"}
+       (println @route)
+       (condp nav/matches @route
+         [:about] [about-view]
+         [:portfolio] [portfolio-view]
+         [:blog] [blog-view]
+         [:contact] [contact-view])])))
 
 (defn footer-view
   [l10n]

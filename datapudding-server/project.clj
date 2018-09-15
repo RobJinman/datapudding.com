@@ -13,7 +13,7 @@
                  [org.postgresql/postgresql "42.2.2"]]
   :min-lein-version "2.0.0"
   :resource-paths ["config", "resources"]
-  :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "datapudding-server.server/run-dev"]}
+  :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "datapudding-server.server/start-dev"]}
                    :dependencies [[io.pedestal/pedestal.service-tools "0.5.4"]]}
              :uberjar {:aot [datapudding-server.server]}}
   :main ^{:skip-aot true} datapudding-server.server)

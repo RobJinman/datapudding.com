@@ -16,19 +16,8 @@
 
 (def common-interceptors [(body-params/body-params) http/html-body])
 
-(def routes (route/expand-routes #{["/" :get (conj common-interceptors `home-page)]
-                                   ["/about" :get (conj common-interceptors `about-page)]}))
-
-;; Map-based routes
-;(def routes `{"/" {:interceptors [(body-params/body-params) http/html-body]
-;                   :get home-page
-;                   "/about" {:get about-page}}})
-
-;; Terse/Vector-based routes
-;(def routes
-;  `[[["/" {:get home-page}
-;      ^:interceptors [(body-params/body-params) http/html-body]
-;      ["/about" {:get about-page}]]]])
+(def routes #{["/" :get (conj common-interceptors `home-page)]
+              ["/about" :get (conj common-interceptors `about-page)]})
 
 (def service {:env :prod
               ;; ::http/interceptors []

@@ -2,6 +2,7 @@
   (:gen-class) ; for -main method in uberjar
   (:require [io.pedestal.http :as server]
             [io.pedestal.http.route :as route]
+            [io.pedestal.http.route.definition.table :refer [table-routes]]
             [datapudding-server.service :as service]))
 
 ;; This is an adapted service map, that can be started and stopped
@@ -35,3 +36,7 @@
   (println "\nCreating your server...")
   (server/start runnable-service))
 
+(defn print-routes
+  "Print our application's routes"
+  []
+  (route/print-routes (table-routes service/routes)))

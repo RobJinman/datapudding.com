@@ -8,6 +8,5 @@ fi
 
 su - postgres -c "dropdb dpdb"
 su - postgres -c "dropdb dptestdb"
-su - postgres -c "dropuser dpadminapp"
-su - postgres -c "dropuser dpclientapp"
+su - postgres -c "dropuser dpapp"
 su - postgres -c "dropuser dpmaster"
